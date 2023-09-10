@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen();
 // Register MediatR and scan the assembly containing your handlers
 builder.Services.AddMediatR(Assembly.GetAssembly(typeof(GetProductsQueryHandler)));
 
-string dbConnectionString = builder.Configuration[key: $"SanaStore_db"]!;
+string dbConnectionString = builder.Configuration.GetConnectionString("SanaStore_db")!;
 
 builder.Services
     .AddDbContextPool<ServiceDbContext>(options =>

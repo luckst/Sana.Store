@@ -28,6 +28,17 @@ namespace Sana.Store.Infrastructure
                 await context.Categories.AddRangeAsync(categories);
                 await context.SaveChangesAsync();
             }
+
+            if (!await context.Customers.AnyAsync())
+            {
+                await context.Customers.AddAsync(new Customer
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Generic",
+                    DocumentNumber = "9999999999"
+                });
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

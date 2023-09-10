@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sana.Store.Domain
+﻿namespace Sana.Store.Domain
 {
     public class OrderDetail : BaseEntity
     {
