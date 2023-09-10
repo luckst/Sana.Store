@@ -23,9 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sana.Store.Infrastructure",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Application", "2.Application", "{C079CE24-C025-4B0A-9BF5-9F77C00B4DD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sana.Store.Application", "Sana.Store.Application\Sana.Store.Application.csproj", "{63D1F374-F8E3-4B2E-B65A-FABDD8DEEFBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sana.Store.Application", "Sana.Store.Application\Sana.Store.Application.csproj", "{63D1F374-F8E3-4B2E-B65A-FABDD8DEEFBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sana.Store.Domain", "Sana.Store.Domain\Sana.Store.Domain.csproj", "{CE9E9E18-0887-4185-A133-421EF5E0EA97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sana.Store.Domain", "Sana.Store.Domain\Sana.Store.Domain.csproj", "{CE9E9E18-0887-4185-A133-421EF5E0EA97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sana.Store.Entities", "Sana.Store.Entities\Sana.Store.Entities.csproj", "{FB8B4977-9984-4A97-834A-091F3EE837F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{CE9E9E18-0887-4185-A133-421EF5E0EA97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE9E9E18-0887-4185-A133-421EF5E0EA97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE9E9E18-0887-4185-A133-421EF5E0EA97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB8B4977-9984-4A97-834A-091F3EE837F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB8B4977-9984-4A97-834A-091F3EE837F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB8B4977-9984-4A97-834A-091F3EE837F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB8B4977-9984-4A97-834A-091F3EE837F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{C079CE24-C025-4B0A-9BF5-9F77C00B4DD4} = {0E1372CA-C101-4070-9B6F-855BAE8353AE}
 		{63D1F374-F8E3-4B2E-B65A-FABDD8DEEFBD} = {C079CE24-C025-4B0A-9BF5-9F77C00B4DD4}
 		{CE9E9E18-0887-4185-A133-421EF5E0EA97} = {FD7B693A-C3D3-454A-B411-20BBE81773B7}
+		{FB8B4977-9984-4A97-834A-091F3EE837F8} = {77933F40-223A-46B0-BADC-157CBD136322}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8736FE3-052B-44E9-9603-0C7B32DE6924}

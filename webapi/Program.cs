@@ -1,10 +1,9 @@
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Sana.Store.Infrastructure;
 using System.Reflection;
 using Sana.Store.Application.Queries.Catalog;
 using MediatR;
+using Sana.Store.Entities.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +31,15 @@ builder.Services
     },
         10
     );
+
+builder.Services.AddAutoMapper(typeof(GetProductsQueryHandler).Assembly);
+
+builder.Services.AddSingleton(settings =>
+{
+    GlobalSettings commonGlobalAppSingleSettings = new GlobalSettings();
+    commonGlobalAppSingleSettings.DbConnectionString = dbConnectionString;
+    return commonGlobalAppSingleSettings;
+});
 
 var app = builder.Build();
 
