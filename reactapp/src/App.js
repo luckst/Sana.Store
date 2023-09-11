@@ -1,59 +1,105 @@
 import React, { Component } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import Layout from './components/Layout';
+import Routing from './components/Routes';
 
-export default class App extends Component {
-    static displayName = App.name;
-
+class App extends Component {
     constructor(props) {
         super(props);
-        this.state = { forecasts: [], loading: true };
+        this.state = {
+            cartItems: [],
+            quantities: {},
+            cartItemCount: 0
+        };
     }
 
-    componentDidMount() {
-        this.populateWeatherData();
-    }
-
-    static renderForecastsTable(forecasts) {
-        return (
-            <table className='table table-striped' aria-labelledby="tabelLabel">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Temp. (C)</th>
-                        <th>Temp. (F)</th>
-                        <th>Summary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {forecasts.map(forecast =>
-                        <tr key={forecast.date}>
-                            <td>{forecast.date}</td>
-                            <td>{forecast.temperatureC}</td>
-                            <td>{forecast.temperatureF}</td>
-                            <td>{forecast.summary}</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-        );
-    }
+    getCartItemCount = () => {
+        this.setState({
+            cartItemCount: this.state.cartItems ? this.state.cartItems.length : 0,
+        });
+    };
 
     render() {
-        let contents = this.state.loading
-            ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-            : App.renderForecastsTable(this.state.forecasts);
-
+        
         return (
-            <div>
-                <h1 id="tabelLabel" >Weather forecast</h1>
-                <p>This component demonstrates fetching data from the server.</p>
-                {contents}
-            </div>
+            <BrowserRouter>
+                <div className="App">
+                    <Layout cartItemCount={this.state.cartItemCount} />
+                    <Routing quantities={this.state.quantities}
+                        addToCart={this.addToCart}
+                        increaseQuantity={this.increaseQuantity}
+                        decreaseQuantity={this.decreaseQuantity}
+                        updateQuantity={this.updateQuantity} />
+                </div>
+            </BrowserRouter>
         );
     }
 
-    async populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        this.setState({ forecasts: data, loading: false });
-    }
+    addToCart = (product) => {
+        this.setState((prevState) => {
+            const { cartItems, quantities } = prevState;
+            const quantity = quantities[product.id] || 1;
+
+            const existingCartItem = cartItems.find((item) => item.id === product.id);
+
+            if (existingCartItem) {
+                const updatedCartItems = cartItems.map((item) => {
+                    if (item.id === product.id) {
+                        return {
+                            ...item,
+                            quantity: item.quantity + quantity,
+                        };
+                    }
+                    return item;
+                });
+                return {
+                    cartItems: updatedCartItems,
+                };
+            } else {
+                return {
+                    cartItems: [
+                        ...cartItems,
+                        {
+                            ...product,
+                            quantity,
+                        },
+                    ],
+                };
+            }
+        }, () => {
+            this.getCartItemCount();
+        });
+    };
+
+    increaseQuantity = (productId, currentQuantity) => {
+        const newQuantity = parseInt(currentQuantity, 10) + 1;
+
+        this.setState((prevState) => ({
+            quantities: {
+                ...prevState.quantities,
+                [productId]: newQuantity,
+            },
+        }));
+    };
+
+    decreaseQuantity = (productId) => {
+        this.setState((prevState) => ({
+            quantities: {
+                ...prevState.quantities,
+                [productId]: Math.max(1, (prevState.quantities[productId] || 0) - 1),
+            },
+        }));
+    };
+
+    updateQuantity = (productId, newQuantity) => {
+        this.setState((prevState) => ({
+            quantities: {
+                ...prevState.quantities,
+                [productId]: parseInt(newQuantity),
+            },
+        }));
+    };
+
 }
+
+export default App;

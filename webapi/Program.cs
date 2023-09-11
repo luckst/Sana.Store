@@ -4,6 +4,7 @@ using System.Reflection;
 using Sana.Store.Application.Queries.Catalog;
 using MediatR;
 using Sana.Store.Entities.Settings;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(Assembly.GetAssembly(typeof(GetProductsQueryHandler)));
 
 string dbConnectionString = builder.Configuration.GetConnectionString("SanaStore_db")!;
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactCorsPolicy", builder =>
+    {
+        builder.WithOrigins("http://localhost:3000") // Reemplaza con la URL de tu aplicación React
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
 builder.Services
     .AddDbContextPool<ServiceDbContext>(options =>
@@ -57,6 +68,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 SeedDatabase(app);
+
+app.UseCors("ReactCorsPolicy");
 
 app.Run();
 

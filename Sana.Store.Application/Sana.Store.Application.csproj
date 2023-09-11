@@ -7,10 +7,6 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Folder Include="Commands\" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Dapper" Version="2.0.151" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
@@ -22,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sana.Store.Domain\Sana.Store.Domain.csproj" />
     <ProjectReference Include="..\Sana.Store.Entities\Sana.Store.Entities.csproj" />
+    <ProjectReference Include="..\Sana.Store.Infrastructure\Sana.Store.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
