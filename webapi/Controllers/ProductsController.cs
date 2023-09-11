@@ -29,14 +29,14 @@ namespace webapi.Controllers
         }
 
         [HttpGet("{productId}/stockavailable/{quantity}")]
-        public async Task<bool> ValidateAvailableStock([FromRoute] Guid productId, [FromRoute] int quantity)
+        public async Task<IActionResult> ValidateAvailableStock([FromRoute] Guid productId, [FromRoute] int quantity)
         {
             var query = new TheresStockAvailableQueryHandler.Query
             {
                 ProductId = productId,
                 Quantity = quantity
             };
-            return await _mediator.Send(query);
+            return Ok(new { IsAvailable = await _mediator.Send(query) });
         }
     }
 }

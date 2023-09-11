@@ -1,18 +1,9 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using Sana.Store.Domain;
 using Sana.Store.Entities.Models;
 using Sana.Store.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
 
 namespace Sana.Store.Application.Commands.Orders
 {
@@ -38,14 +29,15 @@ namespace Sana.Store.Application.Commands.Orders
                 CancellationToken cancellationToken
             )
             {
-                if (command.CustomerId == Guid.Empty)
-                {
-                    throw new ArgumentNullException("customer is required");
-                }
-
                 if (command.Details == null || command.Details.Count == 0)
                 {
                     throw new ArgumentNullException("Products are required");
+                }
+
+
+                if (command.CustomerId == Guid.Empty)
+                {
+                    command.CustomerId = (await _context.Customers.FirstOrDefaultAsync(c => c.DocumentNumber == "9999999999")).Id;
                 }
 
                 Order order = GetOrder(command);

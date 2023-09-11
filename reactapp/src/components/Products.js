@@ -15,7 +15,6 @@ class Products extends Component {
     componentDidMount() {
         fetch(`api/products?pageNumber=${this.state.pageNumber}`)
             .then((response) => {
-                console.log(response);
                 return response.json();
             })
             .then((data) => {
@@ -61,27 +60,54 @@ class Products extends Component {
                 <ul style={{ listStyleType: 'none' }}>
                     {this.state.products.map((product) => (
                         <li key={product.id}>
-                            <h4 className="bold">{product.title}</h4>
-                            <div>
-                                <span style={{ color: "gray" }}>Item No. {product.code}</span> | <span style={{ color: "green" }}>{product.availableStock} in stock</span>
-                            </div>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <h4 className="bold">{product.title}</h4>
+                                    <div>
+                                        <span style={{ color: "gray" }}>Item No. {product.code}</span> | <span style={{ color: "green" }}>{product.availableStock} in stock</span>
+                                        <p style={{ color: "gray" }}>
+                                            {product.description}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="col-md-2 text-right">
+                                   <span style={{ fontWeight: "bold" }}>${product.price}</span>
+                                </div>
+                                <div className="col-md-2">
+                                    <form>
+                                        <div className="form-row align-items-center">
+                                            <div className="input-group">
+                                                <div className="input-group-prepend">
+                                                    <button type="button"  className="input-group-text btn btn-primary" onClick={() => this.props.decreaseQuantity(product.id)}>-</button>
+                                                </div>
+                                                <input
+                                                    className="form-control"
+                                                    type="number"
+                                                    value={this.props.quantities[product.id] || 1}
+                                                    onChange={(e) => this.props.updateQuantity(product.id, e.target.value)}
+                                                    min="1"
+                                                    readOnly
+                                                />
+                                                <div className="input-group-prepend">
+                                                    <button type="button" className="input-group-text btn btn-primary" onClick={() => this.props.increaseQuantity(product.id, this.props.quantities[product.id] || 1)}>+</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
 
-                            <button onClick={() => this.props.decreaseQuantity(product.id)}>-</button>
-                            <input
-                                type="number"
-                                value={this.props.quantities[product.id] || 1}
-                                onChange={(e) => this.props.updateQuantity(product.id, e.target.value)}
-                                min="1"
-                            />
-                            <button onClick={() => this.props.increaseQuantity(product.id, this.props.quantities[product.id] || 1)}>+</button>
-                            <button onClick={() => this.props.addToCart(product)}>Add to Cart</button>
+
+                                </div>
+                                <div className="col-md-2">
+                                    <button className="btn btn-warning" onClick={() => this.props.addToCart(product)}>Add to Cart</button>
+                                </div>
+                            </div>
                         </li>
                     ))}
                 </ul>
                 {this.state.endReached && <div>No more products</div>}
                 <div>
-                    <button onClick={() => this.handlePagination('next')}>
-                        Next
+                    <button className="btn btn-warning" onClick={() => this.handlePagination('next')}>
+                        Next page
                     </button>
                 </div>
             </div>

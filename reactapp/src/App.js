@@ -29,17 +29,39 @@ class App extends Component {
                         addToCart={this.addToCart}
                         increaseQuantity={this.increaseQuantity}
                         decreaseQuantity={this.decreaseQuantity}
-                        updateQuantity={this.updateQuantity} />
+                        updateQuantity={this.updateQuantity}
+                        cartItems={this.state.cartItems}
+                        removeItem={this.removeItem}
+                        removeAllItems={this.removeAllItems}
+                    />
                 </div>
             </BrowserRouter>
         );
     }
 
-    addToCart = (product) => {
-        this.setState((prevState) => {
-            const { cartItems, quantities } = prevState;
-            const quantity = quantities[product.id] || 1;
+    validateStock = async (productId, quantity) => {
+        try {
+            const response = await fetch(`api/products/${productId}/stockavailable/${quantity}`);
+            const result = await response.json();
+            return result.isAvailable;
+        } catch (error) {
+            console.error("Error checking stock availability:", error);
+            return false;
+        }
+    }
 
+    addToCart = async (product) => {
+        const { cartItems, quantities } = this.state;
+        const quantity = quantities[product.id] || 1;
+
+        const isAvailable = await this.validateStock(product.id, quantity);
+
+        if (!isAvailable) {
+            alert("There's not enough stock available");
+            return;
+        }
+
+        this.setState((prevState) => {
             const existingCartItem = cartItems.find((item) => item.id === product.id);
 
             if (existingCartItem) {
@@ -98,6 +120,30 @@ class App extends Component {
                 [productId]: parseInt(newQuantity),
             },
         }));
+    };
+
+    removeItem = (productId) => {
+        this.setState((prevState) => {
+            const updatedCartItems = prevState.cartItems.filter((item) => item.id !== productId);
+            const updatedQuantities = { ...prevState.quantities };
+            delete updatedQuantities[productId];
+
+            return {
+                cartItems: updatedCartItems,
+                quantities: updatedQuantities,
+            };
+        }, () => {
+            this.getCartItemCount();
+        });
+    };
+
+    removeAllItems = () => {
+        this.setState({
+            cartItems: [],
+            quantities: {}, // Remove all quantities
+        }, () => {
+            this.getCartItemCount();
+        });
     };
 
 }

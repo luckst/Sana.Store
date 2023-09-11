@@ -22,7 +22,13 @@ const Routing = (props) => {
                     />
                 }
             />
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/cart"
+                element={
+                    <Cart cartItems={props.cartItems}
+                        removeItem={props.removeItem}
+                        removeAllItems={props.removeAllItems}
+                    />
+                } />
             <Route path="*" element={<Home />} />
         </Routes>
     );

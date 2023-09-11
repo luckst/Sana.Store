@@ -17,12 +17,8 @@ const Header = ({ cartItemCount }) => {
                 <li className="nav-item">
                     <Link className="nav-link" to="/cart">
                         <FontAwesomeIcon icon={faShoppingCart} />
-                        <span className="badge badge-primary">{cartItemCount}</span>
+                        <span style={{ backgroundColor: "red" }} className="badge badge-primary">{cartItemCount}</span>
                     </Link>
-                </li>
-                <li className="nav-item">
-                    {cartItemCount}
-
                 </li>
             </ul>
         </nav>
