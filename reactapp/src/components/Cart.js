@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-const Cart = ({ cartItems, removeItem, removeAllItems }) => {
+const Cart = ({ cartItems, removeItem, removeAllItems, decreaseQuantity, increaseQuantity, updateQuantity, quantities }) => {
+    console.log('Quantities en cart:', quantities);
+    console.log('Cart items en cart:', cartItems);
     const navigate = useNavigate();
 
     const createOrderModel = cartItems.map((item) => {
@@ -14,6 +16,18 @@ const Cart = ({ cartItems, removeItem, removeAllItems }) => {
             price: item.price
         };
     });
+
+    const calculateItemTotal = (item) => {
+        return item.price * item.quantity;
+    };
+
+    const calculateTotalItems = () => {
+        return cartItems.reduce((acc, item) => acc + item.quantity, 0);
+    };
+
+    const calculateTotalPrice = () => {
+        return cartItems.reduce((acc, item) => acc + calculateItemTotal(item), 0);
+    };
 
     const handleProcessOrder = async () => {
         const isOrderSaved = await saveOrder({
@@ -52,9 +66,9 @@ const Cart = ({ cartItems, removeItem, removeAllItems }) => {
         <div className="cart">
             <div className="row">
                 {cartItems.length === 0 && (
-                    <p>There are not items in the cart, To view our products please click here: <Link className="btn btn-primary" to="/products">Products</Link></p>
+                    <p>There are no items in the cart. To view our products, please click here: <Link className="btn btn-primary" to="/products">Products</Link></p>
                 )}
-                <div className="col-md-8 table-resposive">
+                <div className="col-md-8 table-responsive">
                     <h2>My shopping Cart</h2>
                     {cartItems.length > 0 && (
                         <table className="table table-hover">
@@ -71,17 +85,36 @@ const Cart = ({ cartItems, removeItem, removeAllItems }) => {
                                     <tr key={item.id}>
                                         <td valign="middle">
                                             <h5 className="bold">{item.title}</h5>
-                                            <span style={{ color: "gray" }}>Item No. {item.code}</span><br/>
-                                            <a className="btn btn-link" onClick={() => removeItem(item.id)}><FontAwesomeIcon icon={faTrash} />Remove</a>
+                                            <span style={{ color: "gray" }}>Item No. {item.code}</span><br />
+                                            <a href="#" className="btn btn-link" onClick={() => removeItem(item.id)}><FontAwesomeIcon icon={faTrash} />Remove</a>
                                         </td>
                                         <td valign="middle">
                                             <span>$ {item.price}</span>
                                         </td>
                                         <td valign="middle">
-                                            <span>{item.quantity}</span>
+                                            <form>
+                                                <div className="form-row align-items-center">
+                                                    <div className="input-group">
+                                                        <div className="input-group-prepend">
+                                                            <button type="button" className="input-group-text btn btn-primary" onClick={() => decreaseQuantity(item.id)}>-</button>
+                                                        </div>
+                                                        <input
+                                                            className="form-control"
+                                                            type="number"
+                                                            value={quantities[item.id] || 1}
+                                                            onChange={(e) => updateQuantity(item.id, e.target.value)}
+                                                            min="1"
+                                                            readOnly
+                                                        />
+                                                        <div className="input-group-prepend">
+                                                            <button type="button" className="input-group-text btn btn-primary" onClick={() => increaseQuantity(item.id, quantities[item.id] || 1)}>+</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </td>
                                         <td valign="middle">
-                                            <span>$ {item.price * item.quantity}</span>
+                                            <span>$ {calculateItemTotal(item)}</span>
                                         </td>
                                     </tr>
                                 ))}
@@ -95,10 +128,10 @@ const Cart = ({ cartItems, removeItem, removeAllItems }) => {
                         <li>
                             <div className="row">
                                 <div className="col-md-6">
-                                    <span>Items ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})</span>
+                                    <span>Items ({calculateTotalItems()})</span>
                                 </div>
                                 <div className="col-md-6">
-                                    <span>$ {cartItems.reduce((acc, item) => acc + (item.quantity * item.price), 0)}</span>
+                                    <span>$ {calculateTotalPrice()}</span>
                                 </div>
                             </div>
                         </li>

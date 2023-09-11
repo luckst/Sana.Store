@@ -6,7 +6,6 @@ import Home from './Home';
 import Products from './Products';
 
 const Routing = (props) => {
-    console.log('Props en Routing:', props);
     return (
         <Routes>
             <Route path="/" element={<Home />} />
@@ -27,6 +26,9 @@ const Routing = (props) => {
                     <Cart cartItems={props.cartItems}
                         removeItem={props.removeItem}
                         removeAllItems={props.removeAllItems}
+                        increaseQuantity={props.increaseQuantity}
+                        decreaseQuantity={props.decreaseQuantity}
+                        quantities={props.quantities}
                     />
                 } />
             <Route path="*" element={<Home />} />

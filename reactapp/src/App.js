@@ -93,24 +93,77 @@ class App extends Component {
         });
     };
 
+    //increaseQuantity = (productId, currentQuantity) => {
+    //    const newQuantity = parseInt(currentQuantity, 10) + 1;
+
+    //    this.setState((prevState) => ({
+    //        quantities: {
+    //            ...prevState.quantities,
+    //            [productId]: newQuantity,
+    //        },
+    //    }));
+    //};
+
+    //decreaseQuantity = (productId) => {
+    //    this.setState((prevState) => ({
+    //        quantities: {
+    //            ...prevState.quantities,
+    //            [productId]: Math.max(1, (prevState.quantities[productId] || 0) - 1),
+    //        },
+    //    }));
+    //};
+
     increaseQuantity = (productId, currentQuantity) => {
         const newQuantity = parseInt(currentQuantity, 10) + 1;
 
-        this.setState((prevState) => ({
-            quantities: {
+        this.setState((prevState) => {
+            const updatedQuantities = {
                 ...prevState.quantities,
                 [productId]: newQuantity,
-            },
-        }));
+            };
+
+            const updatedCartItems = prevState.cartItems.map((item) => {
+                if (item.id === productId) {
+                    return {
+                        ...item,
+                        quantity: newQuantity,
+                    };
+                }
+                return item;
+            });
+
+            return {
+                quantities: updatedQuantities,
+                cartItems: updatedCartItems,
+            };
+        });
     };
 
     decreaseQuantity = (productId) => {
-        this.setState((prevState) => ({
-            quantities: {
+        this.setState((prevState) => {
+            const currentQuantity = prevState.quantities[productId] || 1;
+            const newQuantity = Math.max(1, currentQuantity - 1);
+
+            const updatedQuantities = {
                 ...prevState.quantities,
-                [productId]: Math.max(1, (prevState.quantities[productId] || 0) - 1),
-            },
-        }));
+                [productId]: newQuantity,
+            };
+
+            const updatedCartItems = prevState.cartItems.map((item) => {
+                if (item.id === productId) {
+                    return {
+                        ...item,
+                        quantity: newQuantity,
+                    };
+                }
+                return item;
+            });
+
+            return {
+                quantities: updatedQuantities,
+                cartItems: updatedCartItems,
+            };
+        });
     };
 
     updateQuantity = (productId, newQuantity) => {
